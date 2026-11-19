@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Option 5: The Nova Split-Star -->
+  <!-- A razor-sharp 4-point star split along the vertical axis by the negative-space response rail -->
+  <rect x="24" y="24" width="464" height="464" rx="108" fill="#0C0F10" stroke="#222829" stroke-width="2"/>
+
+  <!-- Left Half (Platinum White) -->
+  <!-- Vertices: Top (253, 142) -> Outer Left (142, 256) -> Bottom (253, 370) -> Inner Left (236, 256) -->
+  <polygon points="253,142 236,242 142,256 236,270 253,370" fill="#F0F3F2"/>
+
+  <!-- Right Half (Mineral Teal) -->
+  <!-- Vertices: Top (259, 142) -> Inner Right (276, 242) -> Outer Right (370, 256) -> Inner Right (276, 270) -> Bottom (259, 370) -->
+  <polygon points="259,142 276,242 370,256 276,270 259,370" fill="#9AD9CF"/>
+</svg>

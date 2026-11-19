@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Option 3: The Terminal Inversion -->
+  <!-- Direct prompt execution: A razor-sharp command chevron and the active mineral-teal cursor -->
+  <rect x="24" y="24" width="464" height="464" rx="108" fill="#0C0F10" stroke="#222829" stroke-width="2"/>
+
+  <!-- Command Chevron (Platinum White) -->
+  <path d="M 188 172 L 272 256 L 188 340" fill="none" stroke="#F0F3F2" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Active Cursor Block (Mineral Teal) -->
+  <rect x="304" y="196" width="26" height="120" rx="8" fill="#9AD9CF"/>
+</svg>

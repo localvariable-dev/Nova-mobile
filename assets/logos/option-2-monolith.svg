@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Option 2: The Nova Monolith (The Geometric N/A) -->
+  <!-- Two architectural upright pillars in warm white, bridged by the diagonal mineral-teal signal -->
+  <rect x="24" y="24" width="464" height="464" rx="108" fill="#0C0F10" stroke="#222829" stroke-width="2"/>
+  
+  <!-- Left Pillar (Warm White) -->
+  <rect x="164" y="152" width="28" height="208" rx="6" fill="#F0F3F2"/>
+
+  <!-- Dynamic Diagonal Bridge (Mineral Teal) -->
+  <!-- Connects top-left to bottom-right with crisp modern geometry -->
+  <path d="M 192 152 L 226 152 L 320 360 L 286 360 Z" fill="#9AD9CF"/>
+
+  <!-- Right Pillar (Warm White) -->
+  <rect x="320" y="152" width="28" height="208" rx="6" fill="#F0F3F2"/>
+</svg>

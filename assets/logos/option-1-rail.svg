@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Option 1: The Response Rail -->
+  <!-- Pure minimalism: The signature assistant rail paired with the terminal slash -->
+  <rect x="24" y="24" width="464" height="464" rx="108" fill="#0C0F10" stroke="#222829" stroke-width="2"/>
+  
+  <!-- Assistant Response Rail (Mineral Teal) -->
+  <rect x="176" y="146" width="22" height="220" rx="11" fill="#9AD9CF"/>
+  
+  <!-- The Terminal Slash (Warm White) -->
+  <!-- Top: (314, 146), Bottom: (230, 366). Width: 26px -->
+  <path d="M 302 146 L 328 146 C 334 146 339 151 336 157 L 244 361 C 242 365 237 366 232 366 L 206 366 C 200 366 195 361 198 355 L 290 151 C 292 147 297 146 302 146 Z" fill="#F0F3F2"/>
+</svg>

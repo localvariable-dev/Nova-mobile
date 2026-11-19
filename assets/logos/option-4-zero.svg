@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Option 4: The Zero / Anti-Bloat (Ø) -->
+  <!-- Philosophical purity: A slashed ring representing zero overhead, zero cloud middleman, direct local execution -->
+  <rect x="24" y="24" width="464" height="464" rx="108" fill="#0C0F10" stroke="#222829" stroke-width="2"/>
+
+  <!-- The Model Perimeter Ring (Platinum White) -->
+  <circle cx="256" cy="256" r="102" fill="none" stroke="#F0F3F2" stroke-width="26"/>
+
+  <!-- The Anti-Slash / Direct Rail (Mineral Teal) -->
+  <!-- Angled at 45 degrees, cutting through the center from (356, 156) to (156, 356) -->
+  <line x1="352" y1="160" x2="160" y2="352" stroke="#9AD9CF" stroke-width="26" stroke-linecap="round"/>
+</svg>

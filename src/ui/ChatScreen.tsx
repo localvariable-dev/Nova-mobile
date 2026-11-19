@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   ActivityIndicator,
   FlatList,
+  Image,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -13,7 +15,7 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useChat } from "@/state/ChatProvider";
 import { getConversation, getMessages } from "@/storage/repository";
@@ -23,6 +25,7 @@ import { colors, radius, space } from "./theme";
 
 export function ChatScreen({ conversationId }: { conversationId: number | null }) {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { ready, isPreparing, activeGeneration, settings, initializationError, sendMessage, retryLastTurn, stopGeneration } = useChat();
   const [messages, setMessages] = useState<Message[]>([]);
   const [conversationTitle, setConversationTitle] = useState<string | null>(null);
@@ -30,7 +33,26 @@ export function ChatScreen({ conversationId }: { conversationId: number | null }
   const [loadingMessages, setLoadingMessages] = useState(Boolean(conversationId));
   const [error, setError] = useState<string | null>(null);
   const [scrollNearBottom, setScrollNearBottom] = useState(true);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
   const listRef = useRef<FlatList<Message>>(null);
+
+  useEffect(() => {
+    const showEvent = Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
+    const hideEvent = Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
+
+    const showSub = Keyboard.addListener(showEvent, () => {
+      setKeyboardVisible(true);
+      requestAnimationFrame(() => listRef.current?.scrollToEnd({ animated: true }));
+    });
+    const hideSub = Keyboard.addListener(hideEvent, () => {
+      setKeyboardVisible(false);
+    });
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -102,16 +124,23 @@ export function ChatScreen({ conversationId }: { conversationId: number | null }
   const configured = Boolean(settings.baseUrl.trim() && settings.model.trim());
 
   return (
-    <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
+    <View style={styles.safe}>
       <KeyboardAvoidingView
         style={styles.keyboard}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        behavior={Platform.OS === "ios" ? "padding" : "padding"}
         keyboardVerticalOffset={0}
       >
-        <View style={styles.header}>
-          <View style={styles.headerCopy}>
-            <Text style={styles.brand}>ANTI / GPT</Text>
-            <Text style={styles.headerTitle} numberOfLines={1}>{headerTitle}</Text>
+        <View style={[styles.header, { paddingTop: insets.top + space.xs }]}>
+          <View style={styles.brandGroup}>
+            <Image
+              source={require("../../assets/icon.png")}
+              style={styles.headerLogo}
+              accessibilityLabel="AntiGPT Logo"
+            />
+            <View style={styles.headerCopy}>
+              <Text style={styles.brand}>ANTI / GPT</Text>
+              <Text style={styles.headerTitle} numberOfLines={1}>{headerTitle}</Text>
+            </View>
           </View>
           <View style={styles.headerActions}>
             <HeaderAction label="History" onPress={() => router.push("/history")} />
@@ -132,7 +161,11 @@ export function ChatScreen({ conversationId }: { conversationId: number | null }
           </View>
         ) : displayMessages.length === 0 ? (
           <ScrollView contentContainerStyle={styles.emptyContent} keyboardShouldPersistTaps="handled">
-            <View style={styles.emptyMark} />
+            <Image
+              source={require("../../assets/icon.png")}
+              style={styles.emptyLogo}
+              accessibilityLabel="AntiGPT Logo"
+            />
             <Text style={styles.eyebrow}>ON-DEVICE HISTORY</Text>
             <Text style={styles.emptyTitle}>Start with a question.</Text>
             <Text style={styles.emptyCopy}>
@@ -208,11 +241,19 @@ export function ChatScreen({ conversationId }: { conversationId: number | null }
           </View>
         ) : null}
 
-        <View style={styles.composerWrap}>
+        <View
+          style={[
+            styles.composerWrap,
+            { paddingBottom: keyboardVisible ? 8 : Math.max(insets.bottom, 8) },
+          ]}
+        >
           <TextInput
             accessibilityLabel="Message"
             value={draft}
             onChangeText={setDraft}
+            onFocus={() => {
+              requestAnimationFrame(() => listRef.current?.scrollToEnd({ animated: true }));
+            }}
             placeholder="Message your model"
             placeholderTextColor={colors.quiet}
             multiline
@@ -248,7 +289,7 @@ export function ChatScreen({ conversationId }: { conversationId: number | null }
           </Pressable>
         ) : null}
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -296,13 +337,25 @@ const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
   keyboard: { flex: 1 },
   header: {
-    minHeight: 72,
+    minHeight: 64,
     paddingHorizontal: space.md,
-    paddingVertical: space.sm,
+    paddingBottom: space.sm,
     borderBottomColor: colors.border,
     borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: "row",
     alignItems: "center",
+  },
+  brandGroup: {
+    flex: 1,
+    minWidth: 0,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  headerLogo: {
+    width: 32,
+    height: 32,
+    borderRadius: 7,
   },
   headerCopy: { flex: 1, minWidth: 0, justifyContent: "center" },
   brand: { color: colors.accent, fontSize: 10, letterSpacing: 2.2, fontWeight: "700", marginBottom: 3 },
@@ -311,7 +364,7 @@ const styles = StyleSheet.create({
   headerAction: { minWidth: 44, minHeight: 44, justifyContent: "center", alignItems: "center", paddingHorizontal: 5, borderRadius: radius.small },
   headerActionText: { color: colors.muted, fontSize: 12, fontWeight: "600" },
   emptyContent: { flexGrow: 1, width: "100%", maxWidth: 760, alignSelf: "center", justifyContent: "center", alignItems: "flex-start", paddingHorizontal: 28, paddingBottom: 24 },
-  emptyMark: { width: 34, height: 3, borderRadius: 2, backgroundColor: colors.accent, marginBottom: 26 },
+  emptyLogo: { width: 48, height: 48, borderRadius: 12, marginBottom: 20 },
   eyebrow: { color: colors.muted, letterSpacing: 1.4, fontSize: 10, fontWeight: "600", marginBottom: 12 },
   emptyTitle: { color: colors.text, fontSize: 31, lineHeight: 38, fontWeight: "600", letterSpacing: -0.6, maxWidth: 280 },
   emptyCopy: { color: colors.muted, fontSize: 15, lineHeight: 23, marginTop: 12, maxWidth: 330 },
@@ -343,7 +396,7 @@ const styles = StyleSheet.create({
   errorActionButton: { minHeight: 44, justifyContent: "center", alignSelf: "flex-start", paddingRight: 12 },
   hintBox: { marginHorizontal: 14, marginBottom: 8 },
   hintText: { color: colors.muted, fontSize: 12, textAlign: "center" },
-  composerWrap: { width: "100%", maxWidth: 760, alignSelf: "center", flexDirection: "row", alignItems: "flex-end", gap: 10, paddingHorizontal: 12, paddingTop: 10, paddingBottom: 8, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
+  composerWrap: { width: "100%", maxWidth: 760, alignSelf: "center", flexDirection: "row", alignItems: "flex-end", gap: 10, paddingHorizontal: 12, paddingTop: 10, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
   composerInput: { flex: 1, minHeight: 48, maxHeight: 128, backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, borderRadius: radius.medium, paddingHorizontal: 15, paddingVertical: 12, color: colors.text, fontSize: 16, lineHeight: 22 },
   sendButton: { minWidth: 62, height: 48, justifyContent: "center", alignItems: "center", backgroundColor: colors.accent, borderRadius: radius.medium, paddingHorizontal: 12 },
   stopButton: { backgroundColor: colors.surfaceRaised, borderColor: colors.border, borderWidth: 1 },

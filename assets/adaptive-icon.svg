@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Android Adaptive Icon Foreground: Option 5 Star with transparent background -->
+  <!-- Scaled cleanly within the 66% (340px) safe zone -->
+  <!-- Left Half (Platinum White) -->
+  <polygon points="253,142 236,242 142,256 236,270 253,370" fill="#F0F3F2"/>
+
+  <!-- Right Half (Mineral Teal) -->
+  <polygon points="259,142 276,242 370,256 276,270 259,370" fill="#9AD9CF"/>
+</svg>

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "AntiGPT Mobile",
+    "name": "AntiGPT",
     "slug": "antigpt",
     "version": "1.0.0",
     "platforms": [
@@ -10,6 +10,12 @@
     "scheme": "antigptmobile",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0C0F10"
+    },
     "plugins": [
       "expo-router",
       [
@@ -24,7 +30,11 @@
     "android": {
       "package": "com.antigptmobile.app",
       "allowBackup": false,
-      "softwareKeyboardLayoutMode": "resize"
+      "softwareKeyboardLayoutMode": "resize",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0C0F10"
+      }
     },
     "experiments": {
       "typedRoutes": true

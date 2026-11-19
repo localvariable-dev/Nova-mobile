@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Alert, FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, FlatList, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useChat } from "@/state/ChatProvider";
@@ -38,15 +38,28 @@ export default function HistoryScreen() {
         <Pressable onPress={() => router.back()} style={({ pressed }) => [styles.back, pressed && styles.pressed]} accessibilityRole="button">
           <Text style={styles.backText}>Back</Text>
         </Pressable>
-        <Text style={styles.eyebrow}>YOUR DEVICE</Text>
-        <Text style={styles.title}>Conversations</Text>
+        <View style={styles.brandHeader}>
+          <Image
+            source={require("../assets/icon.png")}
+            style={styles.headerLogo}
+            accessibilityLabel="AntiGPT Logo"
+          />
+          <View>
+            <Text style={styles.eyebrow}>YOUR DEVICE</Text>
+            <Text style={styles.title}>Conversations</Text>
+          </View>
+        </View>
         <Text style={styles.subtitle}>Saved only on this device.</Text>
       </View>
 
       {error ? <Text style={styles.error}>{error}</Text> : null}
       {items.length === 0 ? (
         <View style={styles.empty}>
-          <View style={styles.rule} />
+          <Image
+            source={require("../assets/icon.png")}
+            style={styles.emptyLogo}
+            accessibilityLabel="AntiGPT Logo"
+          />
           <Text style={styles.emptyTitle}>No conversations yet</Text>
           <Text style={styles.emptyCopy}>When you start a chat, it will appear here.</Text>
           <Pressable style={({ pressed }) => [styles.action, pressed && styles.pressed]} onPress={() => router.replace("/")} accessibilityRole="button">
@@ -94,7 +107,9 @@ const styles = StyleSheet.create({
   header: { paddingHorizontal: 22, paddingTop: 8, paddingBottom: 20, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
   back: { minHeight: 44, justifyContent: "center", alignSelf: "flex-start", paddingRight: 16, marginBottom: 14 },
   backText: { color: colors.muted, fontSize: 14 },
-  eyebrow: { color: colors.accent, fontSize: 10, letterSpacing: 1.7, fontWeight: "700", marginBottom: 8 },
+  brandHeader: { flexDirection: "row", alignItems: "center", gap: 12, marginBottom: 8 },
+  headerLogo: { width: 36, height: 36, borderRadius: 8 },
+  eyebrow: { color: colors.accent, fontSize: 10, letterSpacing: 1.7, fontWeight: "700", marginBottom: 2 },
   title: { color: colors.text, fontSize: 28, fontWeight: "600", letterSpacing: -0.4 },
   subtitle: { color: colors.muted, fontSize: 14, marginTop: 6 },
   list: { width: "100%", maxWidth: 760, alignSelf: "center", paddingHorizontal: 18, paddingBottom: 24 },
@@ -106,7 +121,7 @@ const styles = StyleSheet.create({
   delete: { minWidth: 44, minHeight: 44, justifyContent: "center", alignItems: "center", paddingHorizontal: 10, borderRadius: radius.small },
   deleteText: { color: colors.muted, fontSize: 12 },
   empty: { flex: 1, justifyContent: "center", paddingHorizontal: 26, paddingBottom: 50 },
-  rule: { width: 32, height: 3, backgroundColor: colors.accent, borderRadius: 2, marginBottom: 22 },
+  emptyLogo: { width: 44, height: 44, borderRadius: 10, marginBottom: 18 },
   emptyTitle: { color: colors.text, fontSize: 22, fontWeight: "600" },
   emptyCopy: { color: colors.muted, fontSize: 14, lineHeight: 21, marginTop: 8 },
   action: { minHeight: 44, justifyContent: "center", alignSelf: "flex-start", marginTop: 14, borderBottomWidth: 1, borderBottomColor: colors.accent },

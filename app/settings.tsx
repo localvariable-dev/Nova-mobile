@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Image, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { gatewayOrigin, validateBaseUrl } from "@/gateway/client";
@@ -84,13 +84,22 @@ export default function SettingsScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
-      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === "ios" ? "padding" : undefined}>
+      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === "ios" ? "padding" : "padding"}>
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
           <Pressable onPress={() => router.back()} style={({ pressed }) => [styles.back, pressed && styles.pressed]} accessibilityRole="button">
             <Text style={styles.backText}>Back</Text>
           </Pressable>
-          <Text style={styles.eyebrow}>CONNECTION</Text>
-          <Text style={styles.title}>Settings</Text>
+          <View style={styles.brandHeader}>
+            <Image
+              source={require("../assets/icon.png")}
+              style={styles.headerLogo}
+              accessibilityLabel="AntiGPT Logo"
+            />
+            <View>
+              <Text style={styles.eyebrow}>CONNECTION</Text>
+              <Text style={styles.title}>Settings</Text>
+            </View>
+          </View>
           <Text style={styles.intro}>Connect directly to the gateway you already use. Values stay on this device.</Text>
 
           <Field label="Gateway base URL" hint="Use the gateway root, with or without a trailing /v1. HTTPS is required except for local loopback and Android emulator development.">
@@ -203,7 +212,9 @@ const styles = StyleSheet.create({
   content: { width: "100%", maxWidth: 680, alignSelf: "center", paddingHorizontal: 22, paddingBottom: 28 },
   back: { minHeight: 44, justifyContent: "center", alignSelf: "flex-start", paddingRight: 16, marginBottom: 14 },
   backText: { color: colors.muted, fontSize: 14 },
-  eyebrow: { color: colors.accent, fontSize: 10, letterSpacing: 1.7, fontWeight: "700", marginBottom: 8 },
+  brandHeader: { flexDirection: "row", alignItems: "center", gap: 12, marginBottom: 8 },
+  headerLogo: { width: 36, height: 36, borderRadius: 8 },
+  eyebrow: { color: colors.accent, fontSize: 10, letterSpacing: 1.7, fontWeight: "700", marginBottom: 2 },
   title: { color: colors.text, fontSize: 28, fontWeight: "600", letterSpacing: -0.4 },
   intro: { color: colors.muted, fontSize: 14, lineHeight: 21, marginTop: 7, marginBottom: 26, maxWidth: 360 },
   field: { flex: 1, marginBottom: 18 },
