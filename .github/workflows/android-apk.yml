@@ -42,6 +42,10 @@ jobs:
       - name: Generate Android project
         run: npx expo prebuild --platform android --no-install --clean
 
+      - name: Embed the JavaScript bundle in the debug APK
+        run: |
+          node -e 'const fs = require("fs"); const file = "android/app/build.gradle"; const source = fs.readFileSync(file, "utf8"); if (!source.includes("react {")) throw new Error("React Native Gradle configuration was not found"); fs.writeFileSync(file, source.replace("react {", "react {\n    debuggableVariants = []"));'
+
       - name: Build debug APK
         working-directory: android
         run: ./gradlew assembleDebug
